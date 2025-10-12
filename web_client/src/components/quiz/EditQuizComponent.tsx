@@ -154,7 +154,6 @@ const EditQuizComponent: React.FC<EditQuizProps> = ({
 
 export default EditQuizComponent;
 
-// Reuse QuestionForm from CreateQuizComponent
 interface QuestionFormProps {
   question: QuestionDto;
   onChange: (q: QuestionDto) => void;
