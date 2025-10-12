@@ -26,41 +26,48 @@ function App() {
   };
 
   const token = localStorage.getItem("jwt");
+  let email = "";
+
+  if (token) email = jwtDecode<{ email: string }>(token).email;
 
   return (
     <>
       {token && (
         <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm border-bottom">
-      <div className="container">
-        <Link className="navbar-brand fw-bold" to="/home">
-          Quiz
-        </Link>
-        <div id="navbarNav">
-          <ul className="navbar-nav ms-auto align-items-lg-center">
-            <li className="nav-item">
-              <Link className="nav-link" to="/home">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/results">
-                Results
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/ranks">
-                Leadboard
-              </Link>
-            </li>
-            <li className="nav-item">
-              <button className="btn btn-danger ms-lg-3 mt-2 mt-lg-0" onClick={handleLogout}>
-                Logout
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+          <div className="container">
+            <Link className="navbar-brand fw-bold" to="/home">
+              Quiz
+            </Link>
+            <div id="navbarNav">
+              <ul className="navbar-nav ms-auto align-items-lg-center">
+                <span className="mr-3 text-primary"> {email}</span>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/home">
+                    Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/results">
+                    Results
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/ranks">
+                    Leadboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className="btn btn-danger ms-lg-3 mt-2 mt-lg-0"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
       )}
 
       <Routes>
@@ -85,7 +92,10 @@ function App() {
           path="/play/:id"
           element={
             <ProtectedRoute role="User">
-              <PlayQuizPage resultService={resultService} quizService={quizService} />
+              <PlayQuizPage
+                resultService={resultService}
+                quizService={quizService}
+              />
             </ProtectedRoute>
           }
         />
@@ -93,7 +103,7 @@ function App() {
           path="/results"
           element={
             <ProtectedRoute role="Admin,User">
-                <ResultsPage resultService={resultService} />
+              <ResultsPage resultService={resultService} />
             </ProtectedRoute>
           }
         />
@@ -101,7 +111,10 @@ function App() {
           path="/ranks"
           element={
             <ProtectedRoute role="Admin,User">
-              <RanksPage resultService={resultService} quizService={quizService} />
+              <RanksPage
+                resultService={resultService}
+                quizService={quizService}
+              />
             </ProtectedRoute>
           }
         />
