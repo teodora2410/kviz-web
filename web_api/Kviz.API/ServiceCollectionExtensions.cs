@@ -1,5 +1,5 @@
 ﻿using Kviz.DataAccess;
-using Kviz.Domain;
+using Kviz.DataAccess.Models;
 using Kviz.Service.IMappingHelper;
 using Kviz.Service.IServices;
 using Kviz.Service.Services;

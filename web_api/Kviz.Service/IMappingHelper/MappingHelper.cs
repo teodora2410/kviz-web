@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Kviz.Domain;
+using Kviz.DataAccess.Models;
 using Kviz.Service.DataTransferObjects;
 
 namespace Kviz.Service.IMappingHelper

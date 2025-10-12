@@ -1,4 +1,4 @@
-﻿namespace Kviz.Domain
+﻿namespace Kviz.DataAccess.Models
 {
     public class Result
     {

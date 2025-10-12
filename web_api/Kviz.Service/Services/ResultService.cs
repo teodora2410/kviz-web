@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Kviz.DataAccess;
-using Kviz.Domain;
+using Kviz.DataAccess.Models;
 using Kviz.Service.DataTransferObjects;
 using Kviz.Service.IServices;
 using System.Diagnostics;

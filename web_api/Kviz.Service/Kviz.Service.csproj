@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kviz.DataAccess\Kviz.DataAccess.csproj" />
-    <ProjectReference Include="..\Kviz.Domain\Kviz.Domain.csproj" />
   </ItemGroup>
 
 </Project>

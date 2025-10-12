@@ -1,4 +1,4 @@
-﻿using Kviz.Domain;
+﻿using Kviz.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kviz.DataAccess
