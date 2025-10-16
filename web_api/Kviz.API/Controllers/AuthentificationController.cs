@@ -16,7 +16,10 @@ namespace Kviz.API.Controllers
             if (!success)
                 return Unauthorized("Invalid credentials.");
             else
-                return Ok(await GenerateToken(user));
+            {
+                var token = await GenerateToken(user);
+                return Ok(new { token, user });
+            }
         }
 
         [HttpPost("register")]
@@ -27,7 +30,10 @@ namespace Kviz.API.Controllers
             if (!success)
                 return Unauthorized("Email or username in use.");
             else
-                return Ok(await GenerateToken(user));
+            {
+                var token = await GenerateToken(user);
+                return Ok(new { token, user });
+            }
         }
 
         private async Task<string?> GenerateToken(UserDto user)

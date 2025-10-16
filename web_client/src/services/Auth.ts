@@ -8,7 +8,8 @@ export class AuthService implements IAuthService {
   async login(data: LoginDto): Promise<string | null> {
     try {
       const response = await axios.post(`${BASE_URL}/auth/login`, data);
-      return response.data;
+      localStorage.setItem("img", response.data.user.profileImage);
+      return response.data.token;
     } catch {
       return null;
     }
@@ -17,7 +18,8 @@ export class AuthService implements IAuthService {
   async register(user: UserDto): Promise<string | null> {
     try {
       const response = await axios.post(`${BASE_URL}/auth/register`, user);
-      return response.data;
+      localStorage.setItem("img", response.data.user.profileImage);
+      return response.data.token;
     } catch {
       return null;
     }

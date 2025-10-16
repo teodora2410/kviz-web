@@ -40,6 +40,11 @@ function App() {
             </Link>
             <div id="navbarNav">
               <ul className="navbar-nav ms-auto align-items-lg-center">
+                <img
+                  src={localStorage.getItem("img") ?? ""}
+                  height={40}
+                  className="rounded"
+                />&emsp;
                 <span className="mr-3 text-primary"> {email}</span>
                 <li className="nav-item">
                   <Link className="nav-link" to="/home">

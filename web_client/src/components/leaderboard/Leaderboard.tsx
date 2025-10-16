@@ -39,40 +39,38 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
     return true;
   });
 
-  const bestResultsMap = new Map<string, {
-    id: number;
-    userId: number;
-    username: string;
-    quizId: number;
-    quizTitle: string;
-    score: number;
-    solvedAt: string;
-  }>();
+  const totalResultsMap = new Map<
+    string,
+    {
+      userId: number;
+      username: string;
+      quizId: number;
+      quizTitle: string;
+      totalPoints: number;
+    }
+  >();
 
   filteredResults.forEach((res) => {
     const key = `${res.userId}-${res.quizId}`;
-    const score = calculatePercentage(res);
+    const attemptPoints = calculatePoints(res);
+    const existing = totalResultsMap.get(key);
 
-    const existing = bestResultsMap.get(key);
-    if (!existing || score > existing.score || (score === existing.score && new Date(res.solvedAt) < new Date(existing.solvedAt))) {
-      bestResultsMap.set(key, {
-        id: res.id,
+    if (existing) {
+      existing.totalPoints += attemptPoints;
+    } else {
+      totalResultsMap.set(key, {
         userId: res.userId,
         username: res.username,
         quizId: res.quizId,
         quizTitle: res.quizDto.title,
-        score,
-        solvedAt: res.solvedAt,
+        totalPoints: attemptPoints,
       });
     }
   });
 
-  const leaderboard = Array.from(bestResultsMap.values()).sort((a, b) => {
-    if (b.score === a.score) {
-      return new Date(a.solvedAt).getTime() - new Date(b.solvedAt).getTime();
-    }
-    return b.score - a.score;
-  });
+  const leaderboard = Array.from(totalResultsMap.values()).sort(
+    (a, b) => b.totalPoints - a.totalPoints
+  );
 
   return (
     <div className="container py-4">
@@ -82,20 +80,27 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
           <select
             className="form-select"
             value={selectedQuizId}
-            onChange={(e) => onQuizChange(e.target.value ? Number(e.target.value) : "")}
+            onChange={(e) =>
+              onQuizChange(e.target.value ? Number(e.target.value) : "")
+            }
           >
             <option value="">All Quizzes</option>
             {quizzes.map((q) => (
-              <option key={q.id} value={q.id}>{q.title}</option>
+              <option key={q.id} value={q.id}>
+                {q.title}
+              </option>
             ))}
           </select>
         </div>
+
         <div className="col-md-6 col-lg-4">
           <label className="form-label fw-bold">Time Period</label>
           <select
             className="form-select"
             value={timeFilter}
-            onChange={(e) => onTimeFilterChange(e.target.value as "all" | "weekly" | "monthly")}
+            onChange={(e) =>
+              onTimeFilterChange(e.target.value as "all" | "weekly" | "monthly")
+            }
           >
             <option value="all">All Time</option>
             <option value="weekly">Last 7 Days</option>
@@ -118,13 +123,18 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                     <strong>Quiz:</strong> {entry.quizTitle}
                   </p>
                   <p className="card-text mb-1">
-                    <strong>Score:</strong>{" "}
-                    <span className={`badge ${entry.score >= 90 ? "bg-success" : entry.score >= 70 ? "bg-warning text-dark" : "bg-secondary"}`}>
-                      {entry.score}%
+                    <strong>Total Points:</strong>{" "}
+                    <span
+                      className={`badge ${
+                        entry.totalPoints >= 20
+                          ? "bg-success"
+                          : entry.totalPoints >= 10
+                          ? "bg-warning text-dark"
+                          : "bg-secondary"
+                      }`}
+                    >
+                      {entry.totalPoints.toFixed(2)}
                     </span>
-                  </p>
-                  <p className="card-text">
-                    <small className="text-muted">Solved: {new Date(entry.solvedAt).toLocaleString()}</small>
                   </p>
                 </div>
               </div>
@@ -132,7 +142,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
           ))
         ) : (
           <div className="col-12">
-            <div className="alert alert-info text-center">No results found.</div>
+            <div className="alert alert-info text-center">
+              No results found.
+            </div>
           </div>
         )}
       </div>
@@ -140,8 +152,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   );
 };
 
-function calculatePercentage(result: ResultDto): number {
-  const total = result.quizDto.questions.length;
+function calculatePoints(result: ResultDto): number {
   let correctCount = 0;
 
   result.quizDto.questions.forEach((q) => {
@@ -159,7 +170,8 @@ function calculatePercentage(result: ResultDto): number {
     }
   });
 
-  return Math.round((correctCount / total) * 100);
+  const points = correctCount * 1.25;
+  return Math.round(points * 100) / 100;
 }
 
 export default Leaderboard;

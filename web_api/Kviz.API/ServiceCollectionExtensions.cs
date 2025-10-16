@@ -13,7 +13,7 @@ namespace Kviz.API
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<QuizDatabaseContext>(options =>
-                options.UseMySql(configuration.GetConnectionString("Db"), ServerVersion.AutoDetect(configuration.GetConnectionString("Db"))));
+                options.UseSqlite(configuration.GetConnectionString("Db")));
             return services;
         }
 

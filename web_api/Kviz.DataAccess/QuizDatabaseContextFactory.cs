@@ -13,7 +13,7 @@ namespace Kviz.DataAccess
             var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
 
-            return new DbContextOptionsBuilder<QuizDatabaseContext>().UseMySql(config.GetConnectionString("Db"), ServerVersion.AutoDetect(config.GetConnectionString("Db"))).Options;
+            return new DbContextOptionsBuilder<QuizDatabaseContext>().UseSqlite(config.GetConnectionString("Db")).Options;
         }
     }
 }
